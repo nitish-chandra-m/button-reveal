@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+}
+
+.app {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  background: white;
+}
+
+.app__eventtitle {
+  margin-top: -100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.app__buttoncard {
+  margin-top: -50px;
+}
+
+.app__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  background-color: #ededed;
+  height: 100vh;
+  width: 100vw;
+  background-image: url("./assets/bg.jpg");
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+@media screen and (max-width: 768px) {
+  .app__buttoncard {
+    height: 50vh;
+  }
+  .app__eventtitle {
+    text-align: center;
+  }
+}
