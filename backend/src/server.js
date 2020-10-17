@@ -5,10 +5,7 @@ import http from "http";
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
-const PORT = process.env.PORT || 3000;
-
-// //Set static folder
-// app.use(express.static("../reveal/build"));
+const PORT = process.env.PORT || 9000;
 
 //Run when a client connects
 io.on("connection", (socket) => {
@@ -24,13 +21,13 @@ io.on("connection", (socket) => {
   //Handling single click
   socket.on("button-click", (name) => {
     //Broadcast message
-    io.emit("button-clicked", `Change color of ${name} button guys`);
+    io.emit("button-clicked", name);
   });
 
   //Handling double click
   socket.on("button-doubleclick", (name) => {
     //Broadcast message
-    io.emit("button-doubleclicked", `Change back color of ${name} button guys`);
+    io.emit("button-doubleclicked", name);
   });
 });
 
