@@ -1,12 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ButtonCard.css";
 import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
 import { useSpring, animated } from "react-spring";
+import firebase from "firebase/app";
+import "firebase/firestore";
 
+//Setting up a WebSocket connection with the server at the server URL
 const socket = io("https://shielded-tor-10043.herokuapp.com/");
 
+//Firebase configuration
+firebase.initializeApp({
+  apiKey: "AIzaSyALG3r2WCr0Lzgnie3_uVZx7uv_N_X_MRs",
+  authDomain: "button-reveal.firebaseapp.com",
+  databaseURL: "https://button-reveal.firebaseio.com",
+  projectId: "button-reveal",
+  storageBucket: "button-reveal.appspot.com",
+  messagingSenderId: "1091722635432",
+  appId: "1:1091722635432:web:26a130b7793b16e0c2fa9d",
+});
+
+const firestore = firebase.firestore();
+
 function ButtonCard() {
+  //React hooks for state
   const [name1, setName1] = useState("Karthik");
   const [name2, setName2] = useState("Abhijith");
   const [name3, setName3] = useState("Atul");
@@ -15,6 +32,19 @@ function ButtonCard() {
   const [btncolor2, setBtnColor2] = useState("secondary");
   const [btncolor3, setBtnColor3] = useState("secondary");
 
+  const [props1, set1] = useSpring(() => ({
+    opacity: 0,
+  }));
+
+  const [props2, set2] = useSpring(() => ({
+    opacity: 0,
+  }));
+
+  const [props3, set3] = useSpring(() => ({
+    opacity: 0,
+  }));
+
+  //Dynamic CSS
   const styles = {
     button: {
       background: "#f50057",
@@ -28,84 +58,157 @@ function ButtonCard() {
     },
   };
 
-  const [props1, set1] = useSpring(() => ({
-    opacity: 0,
-  }));
-
-  const [props2, set2] = useSpring(() => ({
-    opacity: 0,
-    config: { duration: 5000 },
-  }));
-
-  const [props3, set3] = useSpring(() => ({
-    opacity: 0,
-    config: { duration: 5000 },
-  }));
-
-  //Connection check message
-  socket.on("connected-event", (message) => {
-    console.log(message);
-  });
-
-  //Single click handler
-  const handleClick = (name) => {
-    socket.emit("button-click", name);
-  };
-
-  //On receiving server message of button being clicked
-  socket.on("button-clicked", (message) => {
-    if (message === name1) {
+  //Handler functions for single and double click
+  const handlebtn1 = (click) => {
+    if (click === "single") {
       setBtnColor1("green");
       setName1(`Karthik says yes!`);
       set1({
         opacity: 1,
         config: { duration: 5000 },
       });
-    } else if (message === name2) {
+    } else {
+      setBtnColor1("primary");
+      setName1("Karthik");
+      set1({
+        opacity: 0,
+        config: { duration: 1000 },
+      });
+    }
+  };
+
+  const handlebtn2 = (click) => {
+    if (click === "single") {
       setBtnColor2("green");
       setName2(`Abhijith says yes!`);
       set2({
         opacity: 1,
         config: { duration: 5000 },
       });
-    } else if (message === name3) {
+    } else {
+      setBtnColor2("primary");
+      setName2("Abhijith");
+      set2({
+        opacity: 0,
+        config: { duration: 1000 },
+      });
+    }
+  };
+
+  const handlebtn3 = (click) => {
+    if (click === "single") {
       setBtnColor3("green");
       setName3(`Atul says yes!`);
       set3({
         opacity: 1,
         config: { duration: 5000 },
       });
-    }
-  });
-
-  //Double click handler
-  const handleDoubleClick = (name) => {
-    socket.emit("button-doubleclick", name);
-  };
-
-  //On receiving server message of button being double clicked
-  socket.on("button-doubleclicked", (message) => {
-    if (message === name1) {
-      setBtnColor1("secondary");
-      setName1("Karthik");
-      set1({
-        opacity: 0,
-        config: { duration: 1000 },
-      });
-    } else if (message === name2) {
-      setBtnColor2("secondary");
-      setName2("Abhijith");
-      set2({
-        opacity: 0,
-        config: { duration: 1000 },
-      });
-    } else if (message === name3) {
-      setBtnColor3("secondary");
+    } else {
+      setBtnColor3("primary");
       setName3("Atul");
       set3({
         opacity: 0,
         config: { duration: 1000 },
       });
+    }
+  };
+
+  //React hook which will execute the callback function on Mount only
+  useEffect(() => {
+    firestore
+      .collection("buttons")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          if (doc.get("index") === 1 && doc.get("onclick")) {
+            handlebtn1("single");
+          } else if (doc.get("index") === 2 && doc.get("onclick")) {
+            handlebtn2("single");
+          } else if (doc.get("index") === 3 && doc.get("onclick")) {
+            handlebtn3("single");
+          }
+        });
+      });
+  });
+
+  //Connection check message
+  socket.on("connected-event", (message) => {
+    console.log(message);
+  });
+
+  //Single click message to server and update database with onclick=true
+  const handleClick = (name, index) => {
+    socket.emit("button-click", name);
+    if (index === 1) {
+      firestore
+        .collection("buttons")
+        .doc("1symz0Izsxf9rBtuCpUK")
+        .update({ onclick: true });
+    } else if (index === 2) {
+      firestore
+        .collection("buttons")
+        .doc("9EqgM6Q5BIOEGC0vPFKs")
+        .update({ onclick: true });
+    } else if (index === 3) {
+      firestore
+        .collection("buttons")
+        .doc("Vmvil9D6JZbHYGvnM5IQ")
+        .update({ onclick: true });
+    }
+  };
+
+  //On receiving server message of button being clicked
+  socket.on("button-clicked", (message) => {
+    switch (message) {
+      case name1:
+        handlebtn1("single");
+        break;
+      case name2:
+        handlebtn2("single");
+        break;
+      case name3:
+        handlebtn3("single");
+        break;
+      default:
+        break;
+    }
+  });
+
+  //Double click message to server and update database with onclick=false
+  const handleDoubleClick = (name, index) => {
+    socket.emit("button-doubleclick", name);
+    if (index === 1) {
+      firestore
+        .collection("buttons")
+        .doc("1symz0Izsxf9rBtuCpUK")
+        .update({ onclick: false });
+    } else if (index === 2) {
+      firestore
+        .collection("buttons")
+        .doc("9EqgM6Q5BIOEGC0vPFKs")
+        .update({ onclick: false });
+    } else if (index === 3) {
+      firestore
+        .collection("buttons")
+        .doc("Vmvil9D6JZbHYGvnM5IQ")
+        .update({ onclick: false });
+    }
+  };
+
+  //On receiving server message of button being double clicked
+  socket.on("button-doubleclicked", (message) => {
+    switch (message) {
+      case name1:
+        handlebtn1("double");
+        break;
+      case name2:
+        handlebtn2("double");
+        break;
+      case name3:
+        handlebtn3("double");
+        break;
+      default:
+        break;
     }
   });
 
@@ -126,10 +229,10 @@ function ButtonCard() {
           }}
           size="large"
           onClick={() => {
-            handleClick(name1);
+            handleClick(name1, 1);
           }}
           onDoubleClick={() => {
-            handleDoubleClick(name1);
+            handleDoubleClick(name1, 1);
           }}
         >
           {name1} <br />
@@ -151,10 +254,10 @@ function ButtonCard() {
           }}
           size="large"
           onClick={() => {
-            handleClick(name2);
+            handleClick(name2, 2);
           }}
           onDoubleClick={() => {
-            handleDoubleClick(name2);
+            handleDoubleClick(name2, 2);
           }}
         >
           {name2} <br />
@@ -176,10 +279,10 @@ function ButtonCard() {
           }}
           size="large"
           onClick={() => {
-            handleClick(name3);
+            handleClick(name3, 3);
           }}
           onDoubleClick={() => {
-            handleDoubleClick(name3);
+            handleDoubleClick(name3, 3);
           }}
         >
           {name3} <br />
