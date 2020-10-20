@@ -15,9 +15,6 @@ io.on("connection", (socket) => {
     console.log("Client disconnected");
   });
 
-  //Connection check message
-  socket.emit("connected-event", "Welcome to the real-time connection");
-
   //Handling single click
   socket.on("button-click", (name) => {
     //Broadcast message

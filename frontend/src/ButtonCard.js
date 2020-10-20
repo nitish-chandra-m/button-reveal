@@ -27,10 +27,12 @@ function ButtonCard() {
   const [name1, setName1] = useState("Karthik");
   const [name2, setName2] = useState("Abhijith");
   const [name3, setName3] = useState("Atul");
+  const [name4, setName4] = useState("Anubhav");
 
   const [btncolor1, setBtnColor1] = useState("secondary");
   const [btncolor2, setBtnColor2] = useState("secondary");
   const [btncolor3, setBtnColor3] = useState("secondary");
+  const [btncolor4, setBtnColor4] = useState("secondary");
 
   const [props1, set1] = useSpring(() => ({
     opacity: 0,
@@ -41,6 +43,10 @@ function ButtonCard() {
   }));
 
   const [props3, set3] = useSpring(() => ({
+    opacity: 0,
+  }));
+
+  const [props4, set4] = useSpring(() => ({
     opacity: 0,
   }));
 
@@ -113,6 +119,24 @@ function ButtonCard() {
     }
   };
 
+  const handlebtn4 = (click) => {
+    if (click === "single") {
+      setBtnColor4("green");
+      setName4(`Anubhav says yes!`);
+      set4({
+        opacity: 1,
+        config: { duration: 5000 },
+      });
+    } else {
+      setBtnColor4("primary");
+      setName4("Anubhav");
+      set4({
+        opacity: 0,
+        config: { duration: 1000 },
+      });
+    }
+  };
+
   //React hook which will execute the callback function on Mount only
   useEffect(() => {
     firestore
@@ -126,14 +150,11 @@ function ButtonCard() {
             handlebtn2("single");
           } else if (doc.get("index") === 3 && doc.get("onclick")) {
             handlebtn3("single");
+          } else if (doc.get("index") === 4 && doc.get("onclick")) {
+            handlebtn4("single");
           }
         });
       });
-  });
-
-  //Connection check message
-  socket.on("connected-event", (message) => {
-    console.log(message);
   });
 
   //Single click message to server and update database with onclick=true
@@ -154,6 +175,11 @@ function ButtonCard() {
         .collection("buttons")
         .doc("Vmvil9D6JZbHYGvnM5IQ")
         .update({ onclick: true });
+    } else if (index === 4) {
+      firestore
+        .collection("buttons")
+        .doc("W52e6OuJTwN65hINlwAK")
+        .update({ onclick: true });
     }
   };
 
@@ -168,6 +194,9 @@ function ButtonCard() {
         break;
       case name3:
         handlebtn3("single");
+        break;
+      case name4:
+        handlebtn4("single");
         break;
       default:
         break;
@@ -192,6 +221,11 @@ function ButtonCard() {
         .collection("buttons")
         .doc("Vmvil9D6JZbHYGvnM5IQ")
         .update({ onclick: false });
+    } else if (index === 4) {
+      firestore
+        .collection("buttons")
+        .doc("W52e6OuJTwN65hINlwAK")
+        .update({ onclick: false });
     }
   };
 
@@ -206,6 +240,9 @@ function ButtonCard() {
         break;
       case name3:
         handlebtn3("double");
+        break;
+      case name4:
+        handlebtn4("double");
         break;
       default:
         break;
@@ -286,6 +323,31 @@ function ButtonCard() {
           }}
         >
           {name3} <br />
+        </Button>
+      </div>
+
+      <div className="buttonwithgif">
+        <animated.img
+          src="https://webstockreview.net/images/flame-clipart-oil-18.gif"
+          alt="diya"
+          style={props4}
+        />
+
+        <Button
+          variant="contained"
+          style={{
+            ...styles.button,
+            ...(btncolor4 === "green" ? styles.buttonGreen : {}),
+          }}
+          size="large"
+          onClick={() => {
+            handleClick(name4, 4);
+          }}
+          onDoubleClick={() => {
+            handleDoubleClick(name4, 4);
+          }}
+        >
+          {name4} <br />
         </Button>
       </div>
     </div>
