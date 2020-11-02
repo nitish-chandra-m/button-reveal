@@ -5,6 +5,7 @@ import io from "socket.io-client";
 import { useSpring, animated } from "react-spring";
 import firebase from "firebase/app";
 import "firebase/firestore";
+import "firebase/performance";
 
 //Setting up a WebSocket connection with the server at the server URL
 const socket = io("https://shielded-tor-10043.herokuapp.com/");
@@ -21,6 +22,7 @@ firebase.initializeApp({
 });
 
 const firestore = firebase.firestore();
+const perf = firebase.performance();
 
 function ButtonCard() {
   //React hooks for state
