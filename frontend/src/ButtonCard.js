@@ -3,26 +3,11 @@ import "./ButtonCard.css";
 import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
 import { useSpring, animated } from "react-spring";
-import firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/performance";
+import { firestore } from "./config/firebase";
+import { styles } from "./styles";
 
 //Setting up a WebSocket connection with the server at the server URL
 const socket = io("https://shielded-tor-10043.herokuapp.com/");
-
-//Firebase configuration
-firebase.initializeApp({
-  apiKey: "AIzaSyALG3r2WCr0Lzgnie3_uVZx7uv_N_X_MRs",
-  authDomain: "button-reveal.firebaseapp.com",
-  databaseURL: "https://button-reveal.firebaseio.com",
-  projectId: "button-reveal",
-  storageBucket: "button-reveal.appspot.com",
-  messagingSenderId: "1091722635432",
-  appId: "1:1091722635432:web:26a130b7793b16e0c2fa9d",
-});
-
-const firestore = firebase.firestore();
-const perf = firebase.performance();
 
 function ButtonCard() {
   //React hooks for state
@@ -51,20 +36,6 @@ function ButtonCard() {
   const [props4, set4] = useSpring(() => ({
     opacity: 0,
   }));
-
-  //Dynamic CSS
-  const styles = {
-    button: {
-      background: "#f50057",
-      color: "white",
-      boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
-    },
-    buttonGreen: {
-      background:
-        "linear-gradient(164deg, rgba(2,0,36,1) 0%, rgba(13,121,9,1) 0%, rgba(8,182,5,1) 37%, rgba(49,196,3,1) 72%, rgba(1,255,0,1) 100%)",
-      boxShadow: "0 3px 5px 2px rgba(33, 203, 243, .30)",
-    },
-  };
 
   //Handler functions for single and double click
   const handlebtn1 = (click) => {
