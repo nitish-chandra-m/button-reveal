@@ -7,7 +7,7 @@ import { firestore } from "./config/firebase";
 import { styles } from "./styles";
 
 //Setting up a WebSocket connection with the server at the server URL
-const socket = io("https://inaugurate-backend.herokuapp.com/");
+const socket = io("https://inaugurate.herokuapp.com");
 
 function ButtonCard() {
   //React hooks for state
@@ -128,7 +128,7 @@ function ButtonCard() {
           }
         });
       });
-  });
+  }, []);
 
   //Single click message to server and update database with onclick=true
   const handleClick = (name, index) => {
@@ -136,22 +136,22 @@ function ButtonCard() {
     if (index === 1) {
       firestore
         .collection("buttons")
-        .doc("1symz0Izsxf9rBtuCpUK")
+        .doc("4FmDWawKs8m7lXilAXxK")
         .update({ onclick: true });
     } else if (index === 2) {
       firestore
         .collection("buttons")
-        .doc("9EqgM6Q5BIOEGC0vPFKs")
+        .doc("JYEQc1CRKe8WlRkwMFOh")
         .update({ onclick: true });
     } else if (index === 3) {
       firestore
         .collection("buttons")
-        .doc("Vmvil9D6JZbHYGvnM5IQ")
+        .doc("rspMIEbINXlMlSghlXYo")
         .update({ onclick: true });
     } else if (index === 4) {
       firestore
         .collection("buttons")
-        .doc("W52e6OuJTwN65hINlwAK")
+        .doc("wahmmxw4mxySc1Jvqdf1")
         .update({ onclick: true });
     }
   };
@@ -182,22 +182,22 @@ function ButtonCard() {
     if (index === 1) {
       firestore
         .collection("buttons")
-        .doc("1symz0Izsxf9rBtuCpUK")
+        .doc("4FmDWawKs8m7lXilAXxK")
         .update({ onclick: false });
     } else if (index === 2) {
       firestore
         .collection("buttons")
-        .doc("9EqgM6Q5BIOEGC0vPFKs")
+        .doc("JYEQc1CRKe8WlRkwMFOh")
         .update({ onclick: false });
     } else if (index === 3) {
       firestore
         .collection("buttons")
-        .doc("Vmvil9D6JZbHYGvnM5IQ")
+        .doc("rspMIEbINXlMlSghlXYo")
         .update({ onclick: false });
     } else if (index === 4) {
       firestore
         .collection("buttons")
-        .doc("W52e6OuJTwN65hINlwAK")
+        .doc("wahmmxw4mxySc1Jvqdf1")
         .update({ onclick: false });
     }
   };

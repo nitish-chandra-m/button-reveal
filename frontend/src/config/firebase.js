@@ -4,13 +4,13 @@ import "firebase/performance";
 
 //Firebase configuration
 firebase.initializeApp({
-  apiKey: "AIzaSyALG3r2WCr0Lzgnie3_uVZx7uv_N_X_MRs",
-  authDomain: "button-reveal.firebaseapp.com",
-  databaseURL: "https://button-reveal.firebaseio.com",
-  projectId: "button-reveal",
-  storageBucket: "button-reveal.appspot.com",
-  messagingSenderId: "1091722635432",
-  appId: "1:1091722635432:web:26a130b7793b16e0c2fa9d",
+  apiKey: "AIzaSyBVzegGCeKj4egAu1MNhq6hKxJdqegHN1c",
+  authDomain: "virtual-launch.firebaseapp.com",
+  databaseURL: "https://virtual-launch.firebaseio.com",
+  projectId: "virtual-launch",
+  storageBucket: "virtual-launch.appspot.com",
+  messagingSenderId: "184963675978",
+  appId: "1:184963675978:web:6ae29733659b51950af3b3",
 });
 
 export const firestore = firebase.firestore();
