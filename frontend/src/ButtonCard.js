@@ -8,7 +8,7 @@ import { styles } from "./styles";
 
 //Setting up a WebSocket connection with the server at the server URL
 const socket = io(
-  "http://node-env.eba-hm7xhddd.ap-south-1.elasticbeanstalk.com/"
+  "https://node-env.eba-hm7xhddd.ap-south-1.elasticbeanstalk.com/"
 );
 
 function ButtonCard() {
