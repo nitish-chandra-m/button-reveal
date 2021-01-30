@@ -5,4 +5,4 @@ Link to app: [Click here](https://button-reveal.web.app/)
 
 Frontend hosted on *Firebase*
 
-Backend deployed on *Heroku*
+Backend deployed on *AWS Elastic Beanstalk*
