@@ -7,7 +7,9 @@ import { firestore } from "./config/firebase";
 import { styles } from "./styles";
 
 //Setting up a WebSocket connection with the server at the server URL
-const socket = io("https://server.virtuallaunch.tk/");
+const socket = io("https://server.virtuallaunch.tk/", {
+  transports: ["websocket"],
+});
 
 function ButtonCard() {
   //React hooks for state
